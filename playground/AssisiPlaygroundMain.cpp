@@ -61,8 +61,8 @@ int main(int argc, char *argv[])
     int r;
     string config_file_name("Playground.cfg");
 	// Create the world and the viewer
-    string pub_address("tcp://*:5555"); 
-    string sub_address("tcp://*:5556");
+    string pub_address("tcp://*:5055"); 
+    string sub_address("tcp://*:5056");
     string heat_log_file_name;
     double heat_scale;
     int heat_border_size;
@@ -150,7 +150,10 @@ int main(int argc, char *argv[])
     po::store(po::parse_config_file(config_file, desc), vm);
     config_file.close();
 	// not clear what the consequences of >1 notify call are, but no issues noticed
+    std::cout << "  [4] read config from    :"  << config_file_name.c_str() << "\n";
     po::notify(vm);
+    // but only now do we have the right file name for config 
+    std::cout << "  [5] read config from    :"  << config_file_name.c_str() << "\n";
 
     if (vm.count("help"))
     {
@@ -162,7 +165,12 @@ int main(int argc, char *argv[])
     QImage texture(QString(":/textures/ground_grayscale.png"));
     texture = QGLWidget::convertToGLFormat(texture);    
     //texture.invertPixels(QImage::InvertRgba);
-    
+
+    // RM: checking my settings from cfg/cmd get thru
+    std::cout << "  [D] read config from    :"  << config_file_name.c_str() << "\n";
+    std::cout << "  [D] Setting up server to: " << pub_address << "\n";
+    std::cout << "  [D]                     : " << sub_address << "\n";
+
     world = new WorldExt (r, pub_address, sub_address,
 		Color::gray, 
 		World::GroundTexture (
@@ -172,6 +180,7 @@ int main(int argc, char *argv[])
 
 	WorldHeat *heatModel = new WorldHeat(env_temp, heat_scale, heat_border_size);
 	if (heat_log_file_name != "") {
+        //cout << "[I] writing heat data to file: " << heat_log_file_name;
 		heatModel->logToStream (heat_log_file_name);
 	}
 	world->addPhysicSimulation(heatModel);
