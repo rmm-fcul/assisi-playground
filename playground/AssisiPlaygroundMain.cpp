@@ -171,6 +171,11 @@ int main(int argc, char *argv[])
     std::cout << "  [D] Setting up server to: " << pub_address << "\n";
     std::cout << "  [D]                     : " << sub_address << "\n";
 
+    ostringstream stringStream;
+    stringStream << "Pub: " << pub_address << "|| Sub: " << sub_address;
+    string window_name = stringStream.str();
+
+    // end RM
     world = new WorldExt (r, pub_address, sub_address,
 		Color::gray, 
 		World::GroundTexture (
@@ -197,7 +202,8 @@ int main(int argc, char *argv[])
 	if (vm.count ("nogui") == 0) {
 		QApplication app(argc, argv);
 
-		AssisiPlayground viewer (world, heatModel, maxVibration);	
+		AssisiPlayground viewer (world, heatModel, maxVibration, window_name);	
+        //viewer.setWindotitle("FEHN"); cant do it here - no access to the relevant widget
 		viewer.show ();
 	
 		return app.exec();

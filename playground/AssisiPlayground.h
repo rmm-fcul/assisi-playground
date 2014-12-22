@@ -82,7 +82,7 @@ namespace Enki
 		int dataLayerZ;
 
 	public:
-		AssisiPlayground (ExtendedWorld *world, WorldHeat *worldHeat, double maxVibration, QWidget *parent = 0);
+		AssisiPlayground (ExtendedWorld *world, WorldHeat *worldHeat, double maxVibration, std::string label, QWidget *parent = 0);
     void addEPuck(World *world, Point pos);
 
 

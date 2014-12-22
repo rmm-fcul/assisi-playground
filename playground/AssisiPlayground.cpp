@@ -8,7 +8,7 @@
 
 namespace Enki
 {
-	AssisiPlayground::AssisiPlayground (ExtendedWorld *world, WorldHeat *worldHeat, double maxVibration, QWidget *parent) :
+	AssisiPlayground::AssisiPlayground (ExtendedWorld *world, WorldHeat *worldHeat, double maxVibration, std::string label, QWidget *parent) :
 		ViewerWidget(world, parent),
 		extendedWorld (world),
 		worldHeat (worldHeat),
@@ -24,6 +24,9 @@ namespace Enki
 		//ViewerWidget::pos = QPointF(-world->w*5, -world->h * 2);
 		ViewerWidget::pitch = M_PI/2;
 		ViewerWidget::altitude = 80;
+		// RM: set the window title to custom value (so can identify multiple instances)
+        QString q_label = QString("%1").arg(label.c_str());
+        ViewerWidget::setWindowTitle (q_label);
 		std::cout << "dataSize: " << dataSize << "\n";
 	}
     
