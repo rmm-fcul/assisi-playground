@@ -6,8 +6,8 @@
 using namespace Enki;
 using namespace std;
 
-const double WorldHeat::THERMAL_DIFFUSIVITY_AIR = 1.9e-5;
-const double WorldHeat::THERMAL_DIFFUSIVITY_COPPER = 1.11e-4;
+const double WorldHeat::THERMAL_DIFFUSIVITY_AIR = 0.75e-6;
+const double WorldHeat::THERMAL_DIFFUSIVITY_COPPER = 1.61e-4;
 /*const*/ double WorldHeat::CELL_DISSIPATION = 1e-6;
 
 WorldHeat::
