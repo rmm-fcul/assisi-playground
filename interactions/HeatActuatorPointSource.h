@@ -41,6 +41,7 @@ namespace Enki
 		 */
 		double getRealHeat (double dt, WorldHeat *worldHeat) const
 		{
+            // heat => Tref for peltier
 			double factor = std::min (1.0, this->thermalResponseTime * dt);
 			return
 				factor * this->heat

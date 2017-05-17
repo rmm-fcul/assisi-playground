@@ -16,13 +16,13 @@ namespace Enki
 		maxVibration (maxVibration),
 		MAX_AIR_FLOW (10),
 		layerToDraw (NONE),
-		transparency (0.5),
+		transparency (0.9),
 		useGradient (false),
 		dataSize (ceil (2 * world->r / worldHeat->gridScale), ceil (2 * world->r / worldHeat->gridScale)),
 		dataColour (dataSize.x, std::vector<std::vector<float> > (dataSize.y, std::vector<float> (3, 0) ) ),
 		showHelp (true),
 		timeMode (REAL_TIME),
-		dataLayerZ (5)
+		dataLayerZ (1)
 	{
 		//ViewerWidget::pos = QPointF(-world->w*5, -world->h * 2);
         ViewerWidget::camera.pos =QPointF(0.0,0.0);
@@ -52,6 +52,7 @@ using namespace Enki;
 const double AssisiPlayground::MAX_HEAT = 38;
 const double AssisiPlayground::MIN_HEAT = 25;
 const int AssisiPlayground::NUMBER_HEAT_TICS = 9;
+std::string AssisiPlayground::save_frames_path ("");
 
 
 /* virtual */
@@ -100,6 +101,41 @@ void AssisiPlayground::sceneCompletedHook()
 	default:
 		break ;
 	}
+
+	char time[1000];
+    ////// emit an image if it is in 15s //////
+    int EMIT_IVAL = 60;
+    int PERSEC_RES = 10; // not sure how to get this to only cover a single frame, but whole sec is clunky
+
+    if (save_frames_path.length() > 0){
+        int tstep = int(((ExtendedWorld *) this->world)->getAbsoluteTime () * PERSEC_RES);
+        if (tstep % (EMIT_IVAL*PERSEC_RES) == 0) {
+            // show heat layer
+            drawHeatLayer_Chequerboard ();
+            // show time
+            sprintf (time, "time %6.1f", ((ExtendedWorld *) this->world)->getAbsoluteTime ());
+            /*sprintf (time, "time %6.1f, frame => %4d => go to %s", ((ExtendedWorld *) this->world)->getAbsoluteTime (), 
+                    int(((ExtendedWorld *) this->world)->getAbsoluteTime () / EMIT_IVAL),
+                    save_frames_path.c_str()
+                    );*/
+            renderText (10, height () - 10, tr (time));
+
+            glFlush();
+            // emit to file
+            grabFrameBuffer().save(
+                    QString("%1/pg_frame%2.png").arg(save_frames_path.c_str()).arg(
+                        tstep/PERSEC_RES,
+                        //tstep/(EMIT_IVAL*PERSEC_RES), 
+                        (int)8, (int)10, QChar('0'))
+                    );
+
+            // std::string AssisiPlayground::save_frames_path (".");
+            // unshow heat layer?
+
+        }
+    }
+
+
 	glPopMatrix ();
 	glDisable (GL_BLEND);
 	glEnable (GL_LIGHTING);
@@ -112,12 +148,13 @@ void AssisiPlayground::sceneCompletedHook()
 		renderText(10, height()-30, tr("move camera on z by moving mouse while pressing ctrl+shift+right mouse button"));
 	}
 	glColor3d (0, 0, 0);
-	char time[1000];
 	struct tm realTime;
 	time_t unixTime;
 	switch (this->timeMode) {
 	case SIMULATION_TIME:
-		sprintf (time, "time %6.1f", ((ExtendedWorld *) this->world)->getAbsoluteTime ());
+		sprintf (time, "time %6.1f, frame => %4d", ((ExtendedWorld *) this->world)->getAbsoluteTime (), 
+                int(((ExtendedWorld *) this->world)->getAbsoluteTime () / EMIT_IVAL)
+                );
 		renderText (10, height () - 10, tr (time));
 		break;
 	case REAL_TIME:

@@ -104,6 +104,7 @@ int main(int argc, char *argv[])
 	// Create the world and the viewer
     string pub_address("tcp://*:5555"); 
     string sub_address("tcp://*:5556");
+    string img_path("");
 	 string heat_state_filename;
     string heat_log_file_name;
     double heat_scale;
@@ -138,6 +139,9 @@ int main(int argc, char *argv[])
         ("config_file,c", 
          po::value<string>(&config_file_name)->default_value(default_config.native()),
          "configuration file name")
+        ("Output.img_path", 
+         po::value<string>(&img_path)->default_value(""), 
+         "define an image output directory for periodic snapshot to be saved (with heat layer). if unset, no output")
         ("pub_addr",
          po::value<string>(&pub_address)->default_value("tcp://*:5555"),
          "Address for publishing data, in the form tcp://hostname:port")
@@ -363,6 +367,16 @@ int main(int argc, char *argv[])
           cout << "I: setting the custom yaw " << cameraYaw << "\n";
           cam.yaw = cameraYaw;
       }
+      /// RMM 
+        /*("Output.img_path", 
+         po::value<string>(&img_path)->default_value("/tmp"), 
+         "define an image output directory for periodic blah")*/
+      if (vm.count ("Output.img_path") > 0) {
+          cout << "I: setting directory for image output. " << img_path << "\n";
+
+      }
+      viewer. save_frames_path = img_path;
+      // END RMM
       viewer.setCamera(cam.pos, cam.altitude, cam.yaw, cam.pitch);
       if (vm.count ("Viewer.no_help") > 0) {
          viewer.showHelp = false;

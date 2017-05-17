@@ -16,6 +16,7 @@
 #include <QtGui>
 
 #include <vector>
+#include <string>
 
 #include "interactions/WorldHeat.h"
 #include "extensions/ExtendedWorld.h"
@@ -36,6 +37,7 @@ namespace Enki
 		 * Data layers that can be drawn in the window.
 		 */
 		enum Layer {NONE, HEAT, ELECTRIC_FIELD, VIBRATION, LIGHT, AIR_FLOW, DIFFUSIVITY};
+        static std::string save_frames_path ;
 	private:
 		/**
 		 * Time that can be shown in the viewer.
