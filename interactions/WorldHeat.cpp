@@ -186,7 +186,7 @@ computeNextState (double deltaTime)
 				 + (this->grid [this->adtIndex][x + 1][y] - currentHeat) * this->prop [x + 1][y]
 				 + (this->grid [this->adtIndex][x - 1][y] - currentHeat) * this->prop [x - 1][y]
 				 + (this->normalHeat - currentHeat ) * CELL_DISSIPATION
-				 ) * alpha
+				 ) * alpha * RMM_FAST_FACTOR
 				;
 			this->grid [nextAdtIndex][x][y] =
 				this->grid [this->adtIndex][x][y] + deltaHeat;

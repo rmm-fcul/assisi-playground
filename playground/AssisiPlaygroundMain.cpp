@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     string pub_address("tcp://*:5555"); 
     string sub_address("tcp://*:5556");
     string img_path("");
-	 string heat_state_filename;
+    string heat_state_filename;
     string heat_log_file_name;
     double heat_scale;
     int heat_border_size;
