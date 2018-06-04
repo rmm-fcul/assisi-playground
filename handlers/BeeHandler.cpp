@@ -115,11 +115,19 @@ namespace Enki
 
             /* Publishing Object Sensor readings */
             ObjectArray objects;
+            // RM -- padding a blank sensor at start
+            objects.add_range(1e8);
+            objects.add_type("7");
+
             BOOST_FOREACH(ObjectSensor* obj, ca.second->object_sensors)
             {
                 objects.add_range(obj->getDist());                
                 objects.add_type(obj->getType());
             }
+            // RM -- padding a blank sensor at start
+            objects.add_range(1e8);
+            objects.add_type("7");
+            // end -RMM fiddling
             objects.SerializeToString(&data);
             send_multipart(socket, ca.first, "Object", "Ranges", data);
             count++;

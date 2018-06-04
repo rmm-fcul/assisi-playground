@@ -33,7 +33,7 @@ namespace Enki
         len_(body_length), w_(body_width), h_(body_height),
         m_(body_mass), v_max_(max_speed),
         DifferentialWheeled(body_width, max_speed, 0.0),
-        object_sensors(5),
+        object_sensors(3),
         heat_sensors(4),
         color_r_(0.93), color_g_(0.79), color_b_(0)
     {
@@ -59,7 +59,8 @@ namespace Enki
         PhysicalObject::dryFrictionCoefficient = 2.5;
 
         int i = 0;
-        for (double a = -pi/2; i < 5; i++, a += pi/4) 
+        for (double a = -pi/4; i < 3; i++, a += pi/4) 
+        //for (double a = -pi/2; i < 5; i++, a += pi/4) 
             {
             object_sensors[i] = new ObjectSensor
                (this, 
